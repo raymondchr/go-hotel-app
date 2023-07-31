@@ -9,6 +9,15 @@
                 <p>This the third row of about</p>
 
                 <p>This is from the template: {{index .StringMap "test"}}</p>
+
+                <p>
+                    {{if ne (index .StringMap "remote_ip") ""}}
+                        Your remote IP addres id {{index .StringMap "remote_ip"}}
+                    {{else}}
+                        Please go to <a href="/"> this </a>
+                    {{end}}
+                
+                </p>
             </div>
         </div>
     </div>
