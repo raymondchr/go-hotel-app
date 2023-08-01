@@ -47,6 +47,8 @@ func main() {
 	fmt.Println("The server is running on port 8080")
 	// _ = http.ListenAndServe(":8080", nil)
 
+	
+
 	srv := &http.Server{
 		Addr: portNumber,
 		Handler: routes(&app),
