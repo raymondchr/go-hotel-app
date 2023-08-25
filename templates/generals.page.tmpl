@@ -1,33 +1,34 @@
 {{template "base" .}}
 
 {{define "content"}}
- <div class="container">
-        <div class="row">
-            <div class="col">
-                <img src="/static/images/general-suite.jpg" class="img-fluid img-thumbnail d-block room-image mx-auto" alt="room image">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col">
-                <h1 class="text-center mt-4">The Prisma</h1>
-                <p class="text-center">When peace seeks you, you seek us</p>
-                <p class="text-center">General Room</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="row" style="text-align: center">
+<div class="container">
+    <div class="row">
         <div class="col">
-            <a id="check-availability-button" href="#!" class="btn btn-primary mt-3">Check Availability</a>
+            <img src="/static/images/general-suite.jpg" class="img-fluid img-thumbnail d-block room-image mx-auto"
+                alt="room image">
         </div>
     </div>
+
+    <div class="row">
+        <div class="col">
+            <h1 class="text-center mt-4">The Prisma</h1>
+            <p class="text-center">When peace seeks you, you seek us</p>
+            <p class="text-center">General Room</p>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="text-align: center">
+    <div class="col">
+        <a id="check-availability-button" href="#!" class="btn btn-primary mt-3">Check Availability</a>
+    </div>
+</div>
 {{end}}
 
 {{define "js"}}
-    <script>
-            document.getElementById("check-availability-button").addEventListener("click", function () {
-            let html = `
+<script>
+    document.getElementById("check-availability-button").addEventListener("click", function () {
+        let html = `
             <form id="check-availability-form" action="" method="post" novalidate class="needs-validation search-form">
             <div class="form-row">
                 <div class="col">
@@ -44,9 +45,38 @@
         </form>
         `
 
-            attention.custom({ msg: html, title: "Pick your date" });
-        })
+        attention.custom({
+            msg: html,
+            title: "Pick your date",
+            
+            willOpen: () => {
+                const elem = document.getElementById('reservation-dates-modal');
+                const rangepicker = new DateRangePicker(elem, {
+                    format: "dd-mm-yyyy",
+                    orientation: "top"
+                });
+            },
 
-    </script>
+            callback: function (result) {
+                console.log("called");
+
+                form = document.getElementById("check-availability-form");
+                let formData = new FormData(form);
+                formData.append("csrf_token", "{{.CSRFToken}}");
+
+                fetch('/search-availability-json', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        console.log(data.ok);
+                        console.log(data.message);
+                    })
+            }
+        });
+    })
+
+</script>
 {{end}}
-    
