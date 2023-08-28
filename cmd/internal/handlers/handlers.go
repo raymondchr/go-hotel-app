@@ -6,9 +6,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/raymondchr/go-hotel-app/cmd/pkg/config"
-	"github.com/raymondchr/go-hotel-app/cmd/pkg/models"
-	"github.com/raymondchr/go-hotel-app/cmd/pkg/render"
+	"github.com/raymondchr/go-hotel-app/cmd/internal/config"
+	"github.com/raymondchr/go-hotel-app/cmd/internal/forms"
+	"github.com/raymondchr/go-hotel-app/cmd/internal/models"
+	"github.com/raymondchr/go-hotel-app/cmd/internal/render"
 )
 
 var Repo *Repository
@@ -49,7 +50,47 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{})
+	var emptyDataModel models.ReservationData
+	
+	data := make(map[string]interface{})
+	data["reservation"] = emptyDataModel
+	
+	render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{
+		Form: forms.New(nil),
+		Data: data,
+	})
+}
+
+func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	reservation := models.ReservationData{
+		FirstName: r.Form.Get("first_name"),
+		LastName: r.Form.Get("last_name"),
+		Email: r.Form.Get("email"),
+		Phone: r.Form.Get("phone_number"),
+	}
+
+	form := forms.New(r.PostForm)
+
+	form.Has("first_name", r)
+
+	if !form.Valid(){
+		data := make(map[string]interface{})
+		data["reservation"] = reservation
+
+		render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{
+			Form: form,
+			Data: data,
+		})
+		return
+	}
+
+
 }
 
 func (m *Repository) Majors(w http.ResponseWriter, r *http.Request) {

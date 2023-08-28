@@ -44,7 +44,38 @@
         </form>
         `
 
-            attention.custom({ msg: html, title: "Pick your date" });
+            attention.custom({
+            msg: html,
+            title: "Pick your date",
+            
+            willOpen: () => {
+                const elem = document.getElementById('reservation-dates-modal');
+                const rangepicker = new DateRangePicker(elem, {
+                    format: "dd-mm-yyyy",
+                    orientation: "top"
+                });
+            },
+
+            callback: function (result) {
+                console.log("called");
+
+                form = document.getElementById("check-availability-form");
+                let formData = new FormData(form);
+                formData.append("csrf_token", "{{.CSRFToken}}");
+
+                fetch('/search-availability-json', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        console.log(data.ok);
+                        console.log(data.message);
+                    })
+            }
+
+            });
         })
 
     </script>
