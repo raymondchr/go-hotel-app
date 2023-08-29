@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,6 +10,7 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/raymondchr/go-hotel-app/cmd/internal/config"
 	"github.com/raymondchr/go-hotel-app/cmd/internal/handlers"
+	"github.com/raymondchr/go-hotel-app/cmd/internal/models"
 	"github.com/raymondchr/go-hotel-app/cmd/internal/render"
 )
 
@@ -17,6 +19,8 @@ var app config.AppConfig
 var session *scs.SessionManager
 
 func main() {
+	gob.Register(models.ReservationData{})
+
 	//change to true when in production
 	app.InProduction = false
 
