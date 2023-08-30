@@ -144,10 +144,15 @@ func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 
 func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.ReservationData)
+	
 	if !ok {
 		log.Println("Cannot get data from session")
+		m.App.Session.Put(r.Context(),"error","Can get reservation from session")
+		http.Redirect(w,r,"/",http.StatusTemporaryRedirect)
 		return
 	}
+
+	m.App.Session.Remove(r.Context(), "reservation")
 
 	data := make(map[string]interface{})
 	data["reservation"] = reservation

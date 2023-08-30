@@ -1,0 +1,12 @@
+mode: set
+github.com/raymondchr/go-hotel-app/cmd/web/middleware.go:10.53,11.71 1 0
+github.com/raymondchr/go-hotel-app/cmd/web/middleware.go:11.71,14.3 2 0
+github.com/raymondchr/go-hotel-app/cmd/web/middleware.go:17.44,27.2 3 1
+github.com/raymondchr/go-hotel-app/cmd/web/middleware.go:29.49,31.2 1 1
+github.com/raymondchr/go-hotel-app/cmd/web/routes.go:12.49,40.2 17 1
+github.com/raymondchr/go-hotel-app/cmd/web/main.go:21.13,23.16 2 0
+github.com/raymondchr/go-hotel-app/cmd/web/main.go:27.2,35.16 4 0
+github.com/raymondchr/go-hotel-app/cmd/web/main.go:23.16,25.3 1 0
+github.com/raymondchr/go-hotel-app/cmd/web/main.go:38.18,53.16 10 1
+github.com/raymondchr/go-hotel-app/cmd/web/main.go:58.2,66.12 6 1
+github.com/raymondchr/go-hotel-app/cmd/web/main.go:53.16,56.3 2 0

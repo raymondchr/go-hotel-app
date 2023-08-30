@@ -19,6 +19,23 @@ var app config.AppConfig
 var session *scs.SessionManager
 
 func main() {
+	err := run()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("The server is running on port 8080")
+
+	srv := &http.Server{
+		Addr: portNumber,
+		Handler: routes(&app),
+	}
+
+	err = srv.ListenAndServe()
+	log.Fatal(err)
+}
+
+func run() error {
 	gob.Register(models.ReservationData{})
 
 	//change to true when in production
@@ -35,6 +52,7 @@ func main() {
 	templateCache, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("Failed in creating template cache")
+		return err
 	}
 
 	app.TemplateCache = templateCache
@@ -42,22 +60,8 @@ func main() {
 
 	repo := handlers.NewRepo(&app)
 	handlers.NewHandlers(repo)
-
+	
 	render.NewTemplates(&app)
 
-	// http.HandleFunc("/", handlers.Repo.Home)
-	// http.HandleFunc("/about", handlers.Repo.About)
-
-	fmt.Println("The server is running on port 8080")
-	// _ = http.ListenAndServe(":8080", nil)
-
-	
-
-	srv := &http.Server{
-		Addr: portNumber,
-		Handler: routes(&app),
-	}
-
-	err = srv.ListenAndServe()
-	log.Fatal(err)
+	return nil
 }
