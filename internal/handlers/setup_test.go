@@ -13,14 +13,14 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/justinas/nosurf"
-	"github.com/raymondchr/go-hotel-app/cmd/internal/config"
-	"github.com/raymondchr/go-hotel-app/cmd/internal/models"
-	"github.com/raymondchr/go-hotel-app/cmd/internal/render"
+	"github.com/raymondchr/go-hotel-app/internal/config"
+	"github.com/raymondchr/go-hotel-app/internal/models"
+	"github.com/raymondchr/go-hotel-app/internal/render"
 )
 
 var app config.AppConfig
 var session *scs.SessionManager
-var pathToTemplate = "./../../../templates"
+var pathToTemplate = "./../../templates"
 var functions = template.FuncMap{}
 
 
@@ -73,7 +73,7 @@ func getRoutes() http.Handler {
 	mux.Get("/reservation-summary", Repo.ReservationSummary)
 
 	//static file handler
-	fileServer := http.FileServer(http.Dir("./cmd/static/"))
+	fileServer := http.FileServer(http.Dir("./static/"))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
 
 	return mux
@@ -108,7 +108,6 @@ func CreateTestTemplateCache() (map[string]*template.Template, error) {
 	//range through all files with *.page.tmpl
 
 	for _, page := range pages {
-		log.Println(page)
 		name := filepath.Base(page)
 		templateSet, err := template.New(name).Funcs(functions).ParseFiles(page)
 		if err != nil {

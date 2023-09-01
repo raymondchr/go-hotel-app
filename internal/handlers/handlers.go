@@ -6,10 +6,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/raymondchr/go-hotel-app/cmd/internal/config"
-	"github.com/raymondchr/go-hotel-app/cmd/internal/forms"
-	"github.com/raymondchr/go-hotel-app/cmd/internal/models"
-	"github.com/raymondchr/go-hotel-app/cmd/internal/render"
+	"github.com/raymondchr/go-hotel-app/internal/config"
+	"github.com/raymondchr/go-hotel-app/internal/forms"
+	"github.com/raymondchr/go-hotel-app/internal/models"
+	"github.com/raymondchr/go-hotel-app/internal/render"
 )
 
 var Repo *Repository

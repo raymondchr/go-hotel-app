@@ -5,8 +5,8 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/raymondchr/go-hotel-app/cmd/internal/config"
-	"github.com/raymondchr/go-hotel-app/cmd/internal/handlers"
+	"github.com/raymondchr/go-hotel-app/internal/config"
+	"github.com/raymondchr/go-hotel-app/internal/handlers"
 )
 
 func routes(app *config.AppConfig) http.Handler {
@@ -32,7 +32,7 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Get("/reservation-summary", handlers.Repo.ReservationSummary)
 
 	//static file handler
-	fileServer := http.FileServer(http.Dir("./cmd/static/"))
+	fileServer := http.FileServer(http.Dir("./static/"))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
 
 	return mux

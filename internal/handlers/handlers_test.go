@@ -20,6 +20,12 @@ var theTests = []struct {
 	expectedResponseCode int
 }{
 	{"home", "/", "GET", []postData{}, http.StatusOK},
+	{"about", "/about", "GET", []postData{}, http.StatusOK},
+	{"generals-quarters", "/generals-quarter", "GET", []postData{}, http.StatusOK},
+	{"majors-suite", "/majors-suite", "GET", []postData{}, http.StatusOK},
+	{"search-avail", "/search-availability", "GET", []postData{}, http.StatusOK},
+	{"contact", "/contact", "GET", []postData{}, http.StatusOK},
+	{"make-reservation", "/make-reservation", "GET", []postData{}, http.StatusNotFound},
 }
 
 func TestHandlers(t *testing.T) {
@@ -43,33 +49,3 @@ func TestHandlers(t *testing.T) {
 		}
 	}
 }
-
-// func TestRepository_Home(t *testing.T) {
-// 	routes := getRoutes()
-// 	type args struct {
-// 		w http.ResponseWriter
-// 		r *http.Request
-// 	}
-// 	tests := []struct {
-// 		name string
-// 		m    *Repository
-// 		args args
-// 	}{
-// 		{
-// 			//success
-// 			name: "home",
-// 			m: rep
-// 			// {
-// 			// 	UseCache:      true,
-// 			// 	TemplateCache: CreateTestTemplateCache(),
-// 			// 	InProduction:  false,
-// 			// 	Session:       scs.New(),
-// 			// },
-// 		},
-// 	}
-// 	for _, tt := range tests {
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			tt.m.Home(tt.args.w, tt.args.r)
-// 		})
-// 	}
-// }

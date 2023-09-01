@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 
 	"github.com/justinas/nosurf"
-	"github.com/raymondchr/go-hotel-app/cmd/internal/config"
-	"github.com/raymondchr/go-hotel-app/cmd/internal/models"
+	"github.com/raymondchr/go-hotel-app/internal/config"
+	"github.com/raymondchr/go-hotel-app/internal/models"
 )
 
 var app *config.AppConfig
@@ -35,10 +35,8 @@ func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *mod
 
 	if app.UseCache {
 		templateCache = app.TemplateCache
-		log.Println("Using tc")
 	} else {
 		templateCache, _ = CreateTemplateCache()
-		log.Println("reload from disk")
 	}
 
 	//get reqeusted template from cache

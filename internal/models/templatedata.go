@@ -1,6 +1,6 @@
 package models
 
-import "github.com/raymondchr/go-hotel-app/cmd/internal/forms"
+import "github.com/raymondchr/go-hotel-app/internal/forms"
 
 type TemplateData struct {
 	StringMap map[string]string
