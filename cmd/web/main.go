@@ -56,7 +56,7 @@ func run() error {
 	}
 
 	app.TemplateCache = templateCache
-	app.UseCache = false
+	app.UseCache = true
 
 	repo := handlers.NewRepo(&app)
 	handlers.NewHandlers(repo)
