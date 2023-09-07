@@ -24,10 +24,10 @@ func New(data url.Values) *Form {
 }
 
 // Has checked if form field is not empty
-func (f *Form) Has(field string, r *http.Request) bool{
-	x := r.Form.Get(field)
+func (f *Form) Has(field string, r *http.Request) bool {
+	x := f.Get(field)
 	if x == "" {
-		f.Errors.Add(field,"This field cannot be empty")
+		f.Errors.Add(field, "This field cannot be empty")
 		return false
 	}
 
@@ -35,21 +35,21 @@ func (f *Form) Has(field string, r *http.Request) bool{
 }
 
 // Valid checked if form input is empty or not
-func (f *Form) Valid() bool{
+func (f *Form) Valid() bool {
 	return len(f.Errors) == 0
 }
 
 func (f *Form) Required(fields ...string) {
-	for _, field := range fields{
+	for _, field := range fields {
 		value := f.Get(field)
-			if strings.TrimSpace(value) == ""{
-				f.Errors.Add(field, "This cannot be blank")
-			}
+		if strings.TrimSpace(value) == "" {
+			f.Errors.Add(field, "This cannot be blank")
+		}
 	}
 }
 
 func (f *Form) MinLength(fields string, length int, r *http.Request) bool {
-	x := r.Form.Get(fields)
+	x := f.Get(fields)
 	if len(x) < length {
 		f.Errors.Add(fields, fmt.Sprintf("Minimal length of input is %d", length))
 		return false
@@ -58,8 +58,10 @@ func (f *Form) MinLength(fields string, length int, r *http.Request) bool {
 	return true
 }
 
-func (f *Form) IsEmail(field string){
-	if !govalidator.IsEmail(f.Get(field)){
+func (f *Form) IsEmail(field string) bool {
+	if !govalidator.IsEmail(f.Get(field)) {
 		f.Errors.Add(field, "Please enter a valid email")
+		return false
 	}
+	return true
 }

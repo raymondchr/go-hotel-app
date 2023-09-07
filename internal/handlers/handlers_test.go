@@ -41,6 +41,9 @@ var theTests = []struct {
 		{key: "email", value: "a@a.com"},
 		{key: "phone_number", value: "123123"},
 	}, http.StatusOK},
+	{"reserve summary","/reservation-summary","GET", []postData{
+		
+	}, http.StatusOK},
 }
 
 func TestHandlers(t *testing.T) {

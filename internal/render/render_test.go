@@ -1,7 +1,6 @@
 package render
 
 import (
-	"log"
 	"net/http"
 	"testing"
 
@@ -41,11 +40,15 @@ func TestRenderTemplate(t *testing.T) {
 
 	var ww myWriter
 
-	err = RenderTemplate(&ww, r, "base.page.tmpl", &models.TemplateData{})
-	if err != nil{
+	err = RenderTemplate(&ww, r, "home.page.tmpl", &models.TemplateData{})
+	if err != nil {
 		t.Error(err)
 	}
 
+	err = RenderTemplate(&ww, r, "contact.page.tmpl", &models.TemplateData{})
+	if err != nil {
+		t.Error(err)
+	}
 }
 
 func getSession() (*http.Request, error) {
@@ -58,7 +61,21 @@ func getSession() (*http.Request, error) {
 	ctx, _ = session.Load(ctx, r.Header.Get("X-Session"))
 	r = r.WithContext(ctx)
 
-	log.Println("successfuly got the session data")
+	//log.Println("successfuly got the session data")
 
 	return r, nil
+}
+
+func TestNewTemplates(t *testing.T) {
+	NewTemplates(app)
+}
+
+func TestCreateTemplateCache(t *testing.T) {
+	//pathToTemplate = "./../../templates"
+
+	_, err := CreateTemplateCache()
+	if err != nil {
+		t.Error(err)
+	}
+
 }
