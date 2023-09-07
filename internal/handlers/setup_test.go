@@ -54,7 +54,7 @@ func getRoutes() http.Handler {
 	mux := chi.NewRouter()
 
 	mux.Use(middleware.Recoverer)
-	mux.Use(NoSurf)
+	//mux.Use(NoSurf)
 	mux.Use(SessionLoad)
 
 	mux.Get("/", Repo.Home)
@@ -100,7 +100,6 @@ func CreateTestTemplateCache() (map[string]*template.Template, error) {
 
 	// get all the files named *.page.tmpl from ./templates
 	pages, err := filepath.Glob(fmt.Sprintf("%s/*.page.tmpl", pathToTemplate))
-	log.Printf("%s/*.page.tmpl", pathToTemplate)
 	if err != nil {
 		return myCache, err
 	}
