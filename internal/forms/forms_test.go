@@ -46,20 +46,31 @@ func TestForm_Has(t *testing.T) {
 	r := httptest.NewRequest("POST", "/anything", nil)
 	form := New(r.PostForm)
 
-	has := form.Has("name", r)
+	has := form.Has("name")
 	if has {
 		t.Error("Data has not been populated, but still it validated")
+	}
+
+	isErr := form.Errors.Get("name")
+	if isErr == ""{
+		t.Error("It should return error, but does not")
 	}
 
 	postedData := url.Values{}
 	postedData.Add("name", "raymond")
 
 	r = httptest.NewRequest("POST", "/anything", nil)
-	form = New(postedData)
+	r.PostForm = postedData
+	form = New(r.PostForm)
 
-	has = form.Has("name", r)
+	has = form.Has("name")
 	if !has {
 		t.Error("Data has been populated, but does not validated")
+	}
+
+	isErr = form.Errors.Get("name")
+	if isErr != ""{
+		t.Error("It should not return error, but does")
 	}
 }
 
@@ -67,7 +78,7 @@ func TestForm_MinLength(t *testing.T) {
 	r := httptest.NewRequest("POST", "/anything", nil)
 	form := New(r.PostForm)
 
-	isMin := form.MinLength("name", 1, r)
+	isMin := form.MinLength("name", 1)
 	if isMin {
 		t.Error("Data has not been populated, but still it validated")
 	}
@@ -79,7 +90,7 @@ func TestForm_MinLength(t *testing.T) {
 	r.PostForm = postedData
 	form = New(r.PostForm)
 
-	isMin = form.MinLength("name", 1, r)
+	isMin = form.MinLength("name", 1)
 	if !isMin {
 		t.Error("Data has been populated, but does not validated")
 	}
@@ -89,8 +100,8 @@ func TestForm_IsEmail(t *testing.T) {
 	r := httptest.NewRequest("POST", "/anything", nil)
 	form := New(r.PostForm)
 
-	isEmail := form.IsEmail("email")
-	if isEmail {
+	form.IsEmail("email")
+	if form.Valid() {
 		t.Error("Data has not been populated, but still it validated")
 	}
 
@@ -101,8 +112,20 @@ func TestForm_IsEmail(t *testing.T) {
 	r.PostForm = postedData
 	form = New(r.PostForm)
 
-	isEmail = form.IsEmail("email")
-	if !isEmail {
-		t.Error("Data has been populated, but does not validated")
+	form.IsEmail("email")
+	if !form.Valid() {
+		t.Error("email format is correct, but does not validated")
+	}
+
+	postedData = url.Values{}
+	postedData.Add("email", "raymond")
+
+	r = httptest.NewRequest("POST", "/anything", nil)
+	r.PostForm = postedData
+	form = New(r.PostForm)
+
+	form.IsEmail("email")
+	if form.Valid() {
+		t.Error("Key is not an email format, but validated")
 	}
 }

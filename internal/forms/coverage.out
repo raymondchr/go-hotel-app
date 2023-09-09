@@ -1,0 +1,18 @@
+mode: set
+github.com/raymondchr/go-hotel-app/internal/forms/errors.go:7.44,10.2 1 1
+github.com/raymondchr/go-hotel-app/internal/forms/errors.go:13.41,15.27 2 1
+github.com/raymondchr/go-hotel-app/internal/forms/errors.go:19.2,19.23 1 1
+github.com/raymondchr/go-hotel-app/internal/forms/errors.go:15.27,17.3 1 1
+github.com/raymondchr/go-hotel-app/internal/forms/forms.go:18.33,23.2 1 1
+github.com/raymondchr/go-hotel-app/internal/forms/forms.go:26.39,28.13 2 1
+github.com/raymondchr/go-hotel-app/internal/forms/forms.go:33.2,33.13 1 1
+github.com/raymondchr/go-hotel-app/internal/forms/forms.go:28.13,31.3 2 1
+github.com/raymondchr/go-hotel-app/internal/forms/forms.go:37.29,39.2 1 1
+github.com/raymondchr/go-hotel-app/internal/forms/forms.go:41.43,42.31 1 1
+github.com/raymondchr/go-hotel-app/internal/forms/forms.go:42.31,44.37 2 1
+github.com/raymondchr/go-hotel-app/internal/forms/forms.go:44.37,46.4 1 1
+github.com/raymondchr/go-hotel-app/internal/forms/forms.go:50.58,52.21 2 1
+github.com/raymondchr/go-hotel-app/internal/forms/forms.go:57.2,57.13 1 1
+github.com/raymondchr/go-hotel-app/internal/forms/forms.go:52.21,55.3 2 1
+github.com/raymondchr/go-hotel-app/internal/forms/forms.go:60.38,61.40 1 1
+github.com/raymondchr/go-hotel-app/internal/forms/forms.go:61.40,63.3 1 1
