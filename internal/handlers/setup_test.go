@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"time"
 
@@ -14,6 +15,7 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/justinas/nosurf"
 	"github.com/raymondchr/go-hotel-app/internal/config"
+	"github.com/raymondchr/go-hotel-app/internal/helpers"
 	"github.com/raymondchr/go-hotel-app/internal/models"
 	"github.com/raymondchr/go-hotel-app/internal/render"
 )
@@ -23,12 +25,17 @@ var session *scs.SessionManager
 var pathToTemplate = "./../../templates"
 var functions = template.FuncMap{}
 
-
 func getRoutes() http.Handler {
 	gob.Register(models.ReservationData{})
 
 	//change to true when in production
 	app.InProduction = false
+
+	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	app.InfoLog = infoLog
+
+	errorLog := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	app.ErrorLog = errorLog
 
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
@@ -50,6 +57,8 @@ func getRoutes() http.Handler {
 	NewHandlers(repo)
 
 	render.NewTemplates(&app)
+
+	helpers.NewHelpers(&app)
 
 	mux := chi.NewRouter()
 
@@ -128,6 +137,5 @@ func CreateTestTemplateCache() (map[string]*template.Template, error) {
 		myCache[name] = templateSet
 	}
 
-	
 	return myCache, nil
 }

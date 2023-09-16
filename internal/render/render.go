@@ -45,7 +45,6 @@ func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *mod
 	if !ok {
 		log.Fatal("Error in calling the cache")
 		return errors.New("Error in calling the cache")
-
 	}
 
 	buf := new(bytes.Buffer)

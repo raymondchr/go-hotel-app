@@ -3,11 +3,11 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/raymondchr/go-hotel-app/internal/config"
 	"github.com/raymondchr/go-hotel-app/internal/forms"
+	"github.com/raymondchr/go-hotel-app/internal/helpers"
 	"github.com/raymondchr/go-hotel-app/internal/models"
 	"github.com/raymondchr/go-hotel-app/internal/render"
 )
@@ -31,30 +31,26 @@ func NewHandlers(r *Repository) {
 }
 
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	remoteIP := r.RemoteAddr
-	m.App.Session.Put(r.Context(), "remote_ip", remoteIP)
-
 	render.RenderTemplate(w, r, "home.page.tmpl", &models.TemplateData{})
 }
 
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
-	stringMap := make(map[string]string)
-	stringMap["test"] = "Hello, this a string taken from backend"
+	// //populate data from backend to front end
+	// stringMap := make(map[string]string)
+	// stringMap["test"] = "Hello, this a string taken from backend"
 
-	remoteIP := m.App.Session.GetString(r.Context(), "remote_ip")
-	stringMap["remote_ip"] = remoteIP
+	// remoteIP := m.App.Session.GetString(r.Context(), "remote_ip")
+	// stringMap["remote_ip"] = remoteIP
 
-	render.RenderTemplate(w, r, "about.page.tmpl", &models.TemplateData{
-		StringMap: stringMap,
-	})
+	render.RenderTemplate(w, r, "about.page.tmpl", &models.TemplateData{})
 }
 
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	var emptyDataModel models.ReservationData
-	
+
 	data := make(map[string]interface{})
 	data["reservation"] = emptyDataModel
-	
+
 	render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{
 		Form: forms.New(nil),
 		Data: data,
@@ -64,26 +60,26 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
-		log.Println(err)
+		helpers.ServerError(w, err)
 		return
 	}
 
 	reservation := models.ReservationData{
 		FirstName: r.Form.Get("first_name"),
-		LastName: r.Form.Get("last_name"),
-		Email: r.Form.Get("email"),
-		Phone: r.Form.Get("phone_number"),
+		LastName:  r.Form.Get("last_name"),
+		Email:     r.Form.Get("email"),
+		Phone:     r.Form.Get("phone_number"),
 	}
 
 	form := forms.New(r.PostForm)
 
 	//form.Has("first_name", r)
 
-	form.Required("first_name", "last_name","email")
+	form.Required("first_name", "last_name", "email")
 	form.MinLength("first_name", 3)
 	form.IsEmail("email")
 
-	if !form.Valid(){
+	if !form.Valid() {
 		data := make(map[string]interface{})
 		data["reservation"] = reservation
 
@@ -96,7 +92,7 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
 	m.App.Session.Put(r.Context(), "reservation", reservation)
 
-	http.Redirect(w,r,"/reservation-summary", http.StatusSeeOther)
+	http.Redirect(w, r, "/reservation-summary", http.StatusSeeOther)
 }
 
 func (m *Repository) Majors(w http.ResponseWriter, r *http.Request) {
@@ -125,13 +121,13 @@ type jsonResponse struct {
 
 func (m *Repository) AvailabilityJson(w http.ResponseWriter, r *http.Request) {
 	resp := jsonResponse{
-		OK: true,
+		OK:      true,
 		Message: "Available!",
 	}
 
 	out, err := json.Marshal(resp)
-	if err != nil{
-		log.Println(err)
+	if err != nil {
+		helpers.ServerError(w, err)
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -144,11 +140,11 @@ func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 
 func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.ReservationData)
-	
+
 	if !ok {
-		log.Println("Cannot get data from session")
-		m.App.Session.Put(r.Context(),"error","Cannot get reservation from session")
-		http.Redirect(w,r,"/",http.StatusTemporaryRedirect)
+		m.App.ErrorLog.Println("Cannot get reservation from session")
+		m.App.Session.Put(r.Context(), "error", "Cannot get reservation from session")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 
