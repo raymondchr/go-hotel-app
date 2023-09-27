@@ -26,6 +26,8 @@ func ConnectSQL(dsn string) (*DB, error) {
 		log.Fatal(err)
 	}
 
+	log.Println("new database made")
+
 	db.SetConnMaxIdleTime(maxIdleDBConn)
 	db.SetMaxOpenConns(maxOpenDBConn)
 	db.SetConnMaxLifetime(maxOpenDBConnLifetime)
@@ -36,6 +38,8 @@ func ConnectSQL(dsn string) (*DB, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	log.Println("database ping success")
 
 	return dbConn, nil
 }

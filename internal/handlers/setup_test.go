@@ -15,6 +15,7 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/justinas/nosurf"
 	"github.com/raymondchr/go-hotel-app/internal/config"
+	"github.com/raymondchr/go-hotel-app/internal/driver"
 	"github.com/raymondchr/go-hotel-app/internal/helpers"
 	"github.com/raymondchr/go-hotel-app/internal/models"
 	"github.com/raymondchr/go-hotel-app/internal/render"
@@ -24,9 +25,10 @@ var app config.AppConfig
 var session *scs.SessionManager
 var pathToTemplate = "./../../templates"
 var functions = template.FuncMap{}
+var db *driver.DB
 
 func getRoutes() http.Handler {
-	gob.Register(models.ReservationData{})
+	gob.Register(models.Reservation{})
 
 	//change to true when in production
 	app.InProduction = false
@@ -53,7 +55,7 @@ func getRoutes() http.Handler {
 	app.TemplateCache = templateCache
 	app.UseCache = true
 
-	repo := NewRepo(&app)
+	repo := NewRepo(&app, db)
 	NewHandlers(repo)
 
 	render.NewTemplates(&app)

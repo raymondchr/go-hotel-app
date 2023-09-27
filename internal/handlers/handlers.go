@@ -6,22 +6,27 @@ import (
 	"net/http"
 
 	"github.com/raymondchr/go-hotel-app/internal/config"
+	"github.com/raymondchr/go-hotel-app/internal/driver"
 	"github.com/raymondchr/go-hotel-app/internal/forms"
 	"github.com/raymondchr/go-hotel-app/internal/helpers"
 	"github.com/raymondchr/go-hotel-app/internal/models"
 	"github.com/raymondchr/go-hotel-app/internal/render"
+	"github.com/raymondchr/go-hotel-app/internal/repository"
+	"github.com/raymondchr/go-hotel-app/internal/repository/dbrepo"
 )
 
 var Repo *Repository
 
 type Repository struct {
 	App *config.AppConfig
+	DB  repository.DatabaseRepo
 }
 
 // NewRepo creates a new repository
-func NewRepo(a *config.AppConfig) *Repository {
+func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
 		App: a,
+		DB:  dbrepo.NewPostgresRepo(db.SQL, a),
 	}
 }
 
@@ -46,7 +51,7 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	var emptyDataModel models.ReservationData
+	var emptyDataModel models.Reservation
 
 	data := make(map[string]interface{})
 	data["reservation"] = emptyDataModel
@@ -64,7 +69,7 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	reservation := models.ReservationData{
+	reservation := models.Reservation{
 		FirstName: r.Form.Get("first_name"),
 		LastName:  r.Form.Get("last_name"),
 		Email:     r.Form.Get("email"),
@@ -139,7 +144,7 @@ func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
-	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.ReservationData)
+	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 
 	if !ok {
 		m.App.ErrorLog.Println("Cannot get reservation from session")

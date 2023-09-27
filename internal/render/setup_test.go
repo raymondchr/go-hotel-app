@@ -17,7 +17,7 @@ var session *scs.SessionManager
 var testApp config.AppConfig
 
 func TestMain(m *testing.M) {
-	gob.Register(models.ReservationData{})
+	gob.Register(models.Reservation{})
 
 	//change to true when in production
 	testApp.InProduction = false

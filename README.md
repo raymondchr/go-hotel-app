@@ -1,6 +1,8 @@
 # go-hotel-app
 
-This is my personal Golang Project that creates a virtual hotel web app.
+This is a personal Golang Project that creates a virtual hotel web app.
+This project implements global app configuration utilizing repository function pattern
+This project uses postgres as the database
 
 - Built in Go version 1.19.1
 - Uses [chi router](github.com/go-chi/chi) for routing and middleware purposes
