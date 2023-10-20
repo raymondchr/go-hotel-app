@@ -25,10 +25,12 @@ var app config.AppConfig
 var session *scs.SessionManager
 var pathToTemplate = "./../../templates"
 var functions = template.FuncMap{}
-var db *driver.DB
 
 func getRoutes() http.Handler {
 	gob.Register(models.Reservation{})
+	gob.Register(models.User{})
+	gob.Register(models.Room{})
+	gob.Register(models.RoomRestriction{})
 
 	//change to true when in production
 	app.InProduction = false
@@ -47,6 +49,11 @@ func getRoutes() http.Handler {
 
 	app.Session = session
 
+	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=bookings user=postgres password=qweasd123")
+	if err != nil{
+		log.Fatal("Cannot connect to database")
+	}
+
 	templateCache, err := CreateTestTemplateCache()
 	if err != nil {
 		log.Fatal("Failed in creating template cache")
@@ -58,7 +65,7 @@ func getRoutes() http.Handler {
 	repo := NewRepo(&app, db)
 	NewHandlers(repo)
 
-	render.NewTemplates(&app)
+	render.NewRenderer(&app)
 
 	helpers.NewHelpers(&app)
 
